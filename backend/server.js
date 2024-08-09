@@ -2,34 +2,35 @@ require('dotenv').config();
 const express = require('express');
 const app = express();
 const PORT = process.env.PORT || 5500;
-const router = require('./routes');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const cookieParser = require('cookie-parser');
-
-main().
-then(()=>{
-    console.log("connection successful");
-})
-.catch(err => console.log(err));
+const router = require('./routes');
 
 async function main() {
   await mongoose.connect(process.env.DB_URL);
 }
-const corsOption = {
-    credentials:true,
-    origin:process.env.REACT_APP_API_URL,
+
+main()
+.then(() => {
+    console.log("Connection successful");
+})
+.catch(err => console.log(err));
+
+const corsOptions = {
+    credentials: true,
+    origin: process.env.REACT_APP_API_URL, // Ensure this is set correctly in your .env
 };
 
-// app.use(router);
-
-app.use(cors(corsOption));
+// Use CORS before any route definitions
+app.use(cors(corsOptions));
 app.use(cookieParser());
 app.use(bodyParser.json());
 app.use(express.json({ limit: '8mb' }));
-// Middleware to parse JSON bodies
-app.use(express.json());
+
+// Routes
+app.use(router);
 
 app.get('/', (req, res) => {
   res.send('Hello World!');

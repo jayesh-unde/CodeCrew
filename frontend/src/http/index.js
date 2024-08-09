@@ -13,7 +13,6 @@ const api = axios.create(
 
 //list of all endpoints
 
-// export const sendOtpEmail = (data)=>api.post('/api/send-otp-email',data);
-// export const findUser = (data)=>api.post('/api/find-user',data);
+export const executeCode = (language, sourceCode) => api.post('/api/run', { language, code: sourceCode });
 
 export default api;

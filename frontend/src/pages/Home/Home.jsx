@@ -1,12 +1,16 @@
 import React from 'react';
-import styles from './Home.module.css';
+import Navbar from '../../components/Navbar'; // Update the import path as necessary
+import Footer from '../../components/Footer';
+import Holder from '../../components/Holder';
+import './Home.module.css'; // Assuming you have specific CSS for Home
 
 const Home = () => {
   return (
-    <div className={styles.container}>
-      <h1>Welcome to the Home Page!</h1>
-      <p>This is a simple home page component styled with CSS Modules.</p>
-    </div>
+    <>
+      <Navbar />
+      <Holder />
+      <Footer />
+    </>
   );
 };
 
