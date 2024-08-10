@@ -22,8 +22,8 @@ const CodeEditor = () => {
 
   return (
     <Box>
-      <HStack spacing={4}>
-        <Box w="50%">
+      <HStack spacing={4} style={{display:"flex",flexWrap:"row"}}>
+      <Box w="50%" style={{minWidth:"200px"}}>
           <LanguageSelector language={language} onSelect={onSelect} />
           <Editor
             options={{

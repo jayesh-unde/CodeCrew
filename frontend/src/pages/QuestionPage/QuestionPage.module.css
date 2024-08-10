@@ -1,0 +1,8 @@
+/* module.css */
+/* Example CSS Module for additional styles if needed */
+.container {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+  }
+  

@@ -13,6 +13,6 @@ const api = axios.create(
 
 //list of all endpoints
 
-export const executeCode = (language, sourceCode) => api.post('/api/run', { language, code: sourceCode });
+export const executeCode = (language, sourceCode, inputValue) => api.post('/api/run', { language, code: sourceCode, inputValue });
 
 export default api;

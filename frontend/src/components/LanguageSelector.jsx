@@ -8,7 +8,7 @@ import {
     Text,
   } from "@chakra-ui/react";
   import { LANGUAGE_VERSIONS } from "../constants";
-  
+  import { IoIosArrowDown } from "react-icons/io";
   const languages = Object.entries(LANGUAGE_VERSIONS);
   const ACTIVE_COLOR = "blue.400";
   
@@ -19,7 +19,7 @@ import {
           Language:
         </Text>
         <Menu isLazy>
-          <MenuButton as={Button}>{language}</MenuButton>
+        <MenuButton as={Button} style={{border:"1px solid white"}} >{language} &nbsp; ▼</MenuButton>
           <MenuList bg="#110c1b">
             {languages.map(([lang, version]) => (
               <MenuItem

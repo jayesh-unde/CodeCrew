@@ -1,11 +1,9 @@
 import React from 'react';
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
-import { useSelector } from 'react-redux';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Home from './pages/Home/Home';
 import PlayGround from './pages/PlayGround/PlayGround';
-// import Loader from './components/shared/Loader/Lader';
-// import { ToastContainer } from 'react-toastify';
-// import 'react-toastify/dist/ReactToastify.css';
+import QuestionPage from './pages/QuestionPage/QuestionPage';
+
 
 function App() {
   return (
@@ -13,6 +11,7 @@ function App() {
       <Routes>
         <Route path="/" element={<Home/>} />
         <Route path="/playground" element={<PlayGround/>} />
+        <Route path="/question" element={<QuestionPage/>} />
       </Routes>
     </BrowserRouter>
   );

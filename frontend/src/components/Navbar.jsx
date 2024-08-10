@@ -21,7 +21,6 @@ const Navbar = () => {
                     <h3 className="title" onClick={() => handleNavigate('playground')}>Playground</h3>
                     <h3 className="title" onClick={() => handleNavigate('arena')}>Arena</h3>
                     <h3 className="title" onClick={() => handleNavigate('battleground')}>Battleground</h3>
-                    <h3 className="title">Online IDE Platform</h3> {/* No navigation for this item */}
                 </div>
             </div>
             <hr className="rule" />
