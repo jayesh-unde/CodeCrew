@@ -2,7 +2,7 @@ import { Box, VStack, Flex, Tab, Tabs, TabList, TabPanels, TabPanel, Text, Stat,
 
 const QuestionComponent = ({ question }) => {
     return (
-        <Flex direction="column" height="full" bg="brand.200">
+        <Flex direction="column" height="100vh" bg="brand.200">
             <Tabs variant="enclosed" isFitted>
                 <TabList>
                     <Tab>Description</Tab>

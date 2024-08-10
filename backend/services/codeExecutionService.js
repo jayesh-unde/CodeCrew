@@ -6,7 +6,7 @@ const { v4: uuid } = require('uuid');
 const dirCodes = path.join(__dirname, 'codes');
 const outputPath = path.join(__dirname, 'outputs');
 
-// Ensure directories exist
+
 if (!fs.existsSync(dirCodes)) {
   fs.mkdirSync(dirCodes, { recursive: true });
 }
@@ -14,7 +14,7 @@ if (!fs.existsSync(outputPath)) {
   fs.mkdirSync(outputPath, { recursive: true });
 }
 
-// Generate a code file
+
 const generateFile = async (language, content) => {
   if (!fs.existsSync(dirCodes)) {
     fs.mkdirSync(dirCodes, { recursive: true });

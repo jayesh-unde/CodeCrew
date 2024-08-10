@@ -6,7 +6,8 @@ import { Editor } from "@monaco-editor/react";
 import { CODE_SNIPPETS } from "../../constants";
 import { MdPlayArrow, MdCloudUpload } from "react-icons/md"; // Icons for buttons
 import QuestionComponent from '../../components/QuestionComponent';
-
+import TestCaseContainer from '../../components/TestCaseContainer';
+import Navbar from "../../components/Navbar";
 const questionData = {
   "Title": "Reverse Integer",
   "Description": "Given a 32-bit signed integer, reverse digits of an integer. Note: Assume we are dealing with an environment that could only store integers within the 32-bit signed integer range: [−2^31,  2^31 − 1]. For the purpose of this problem, assume that your function returns 0 when the reversed integer overflows. Given a 32-bit signed integer, reverse digits of an integer. Note: Assume we are dealing with an environment that could only store integers within the 32-bit signed integer range: [−2^31,  2^31 − 1]. For the purpose of this problem, assume that your function returns 0 when the reversed integer overflows.",
@@ -40,6 +41,8 @@ const QuestionPage = () => {
   };
 
   return (
+    <>
+    <Navbar/>
     <ChakraProvider theme={theme} >
       <VStack spacing={4} m={2} h="calc(100vh - 4rem)" w="99%" overflowX="hidden">
         <HStack justify="center" spacing={8} w="full">
@@ -97,8 +100,9 @@ const QuestionPage = () => {
                   />
                 </Box>
               </Resizable>
-              <Box h="full" p={0} bg="gray.500" overflowY="auto" w="full">
-                Right Bottom Content
+              <div style={{border:"1px solid white", width:"100%"}}></div>
+              <Box h="full" p={0} bg="gray.800" overflowY="auto" w="full">
+                <TestCaseContainer question={questionData} />
               </Box>
             </VStack>
           </Resizable>
@@ -106,6 +110,7 @@ const QuestionPage = () => {
         
       </VStack>
     </ChakraProvider>
+    </>
   );
 };
 

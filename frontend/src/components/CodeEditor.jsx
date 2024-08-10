@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useRef, useState, useEffect } from "react";
 import { Box, HStack } from "@chakra-ui/react";
 import { Editor } from "@monaco-editor/react";
 import LanguageSelector from "./LanguageSelector";
@@ -19,6 +19,16 @@ const CodeEditor = () => {
     setLanguage(language);
     setValue(CODE_SNIPPETS[language]);
   };
+
+  useEffect(() => {
+    const savedCode = localStorage.getItem('codeEditorContent');
+    if (savedCode) {
+      setValue(savedCode);
+    }
+  }, []);
+  useEffect(() => {
+    localStorage.setItem('codeEditorContent', value);
+  }, [value]);
 
   return (
     <Box>
