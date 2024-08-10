@@ -1,4 +1,4 @@
-const { generateFile, executeCpp, executePy } = require('../services/codeExecutionService');
+const { generateFile, executeCpp, executePy, runCppWithInputs} = require('../services/codeExecutionService');
 
 class CodeController {
     async executeAnswer(req, res) {
@@ -24,7 +24,7 @@ class CodeController {
 
             res.json({ filepath, output });
         } catch (error) {
-            // console.error('Execution error:', error);
+            console.error('Execution error:', error);
             // console.log(error.stderr)
             res.status(500).json({ success: false, error: error.error || 'Failed to execute code in backend' });
         }

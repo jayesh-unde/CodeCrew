@@ -29,33 +29,83 @@ const generateFile = async (language, content) => {
   return filepath;
 };
 
-// Execute C++ code
-const executeCpp = async (filepath,inputs) => {
-  console.log("input",inputs);
-  console.log("path",filepath);
+const executeCpp = async (codePath, inputs) => {
+    return new Promise((resolve, reject) => {
+    const jobId = uuid();
+    const exePath = path.join(dirCodes, `${jobId}.exe`);
 
-  const jobId = path.basename(filepath, '.cpp');
-  const outPath = path.join(outputPath, `${jobId}.out`);
-  // const command = `g++ "${filepath}" -o "${outPath}" && "${outPath}"`;
-  const command = `g++ "${filepath}" -o "${outPath}" && echo "${inputs}" | "${outPath}"`;
-  return new Promise((resolve, reject) => {
-    exec(command, (error, stdout, stderr) => {
-      if (error || stderr) {
-        reject({ error, stderr });
+    const compileProcess = spawn('g++', [codePath, '-o', exePath]);
+
+    compileProcess.stderr.on('data', (data) => {
+      reject({ code: 1, error: `Compilation Error: ${data.toString()}` });
+    });
+
+    compileProcess.on('close', (code) => {
+      if (code !== 0) {
+        return reject({ code: code, error: `Compilation failed with exit code ${code}` });
       }
-      resolve(stdout);
+
+      const runProcess = spawn(exePath);
+
+      runProcess.stdin.write(inputs);
+      runProcess.stdin.end();
+
+      let output = '';
+      let error = '';
+
+      runProcess.stdout.on('data', (data) => {
+        output += data.toString();
+      });
+
+      runProcess.stderr.on('data', (data) => {
+        error += data.toString();
+      });
+
+      runProcess.on('close', (code) => {
+        if (code !== 0) {
+          reject({ code: code, error: error });
+        } else {
+          resolve(output);
+        }
+      });
+
+      runProcess.on('error', (err) => {
+        reject({ code: 1, error: err.message });
+      });
     });
   });
 };
 
+
+// // Execute C++ code
+// const executeCpp = async (filepath,inputs) => {
+//   console.log("input",inputs);
+//   console.log("path",filepath);
+
+//   const jobId = path.basename(filepath, '.cpp');
+//   const outPath = path.join(outputPath, `${jobId}.out`);
+//   // const command = `g++ "${filepath}" -o "${outPath}" && "${outPath}"`;
+//   const command = `g++ "${filepath}" -o "${outPath}" && echo "${inputs}" | "${outPath}"`;
+//   return new Promise((resolve, reject) => {
+//     exec(command, (error, stdout, stderr) => {
+//       if (error || stderr) {
+//         reject({ error, stderr });
+//       }
+//       resolve(stdout);
+//     });
+//   });
+// };
+
 // Execute Python code
-const executePy = (filepath,inputs) => {
+const executePy = (filepath, inputs) => {
   const filename = path.basename(filepath);
 
     return new Promise((resolve, reject) => {
-      const program = spawn(`python`, [filename], { cwd: dirCodes })
+      const program = spawn('python', [filename], { cwd: dirCodes });
+
       let output = '';
       let error = '';
+
       program.stdin.write(inputs);
       program.stdin.end();
 
@@ -68,15 +118,13 @@ const executePy = (filepath,inputs) => {
       });
 
       program.on('error', (err) => {
-          console.log(err);
-          reject(err)
+          reject({ code: 1, error: err.message });
       });
 
       program.on('close', (code) => {
           if (code !== 0) {
-              reject({code:code,error:error});
+            reject({ code: code, error: error });
           } else {
-            console.log(output);
             resolve(output);
           }
       });
