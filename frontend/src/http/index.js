@@ -14,5 +14,6 @@ const api = axios.create(
 //list of all endpoints
 
 export const executeCode = (language, sourceCode, inputValue) => api.post('/api/run', { language, code: sourceCode, inputValue });
+export const submitQuestion = (questionData) => api.post('/api/submit-question', questionData);
 
 export default api;
