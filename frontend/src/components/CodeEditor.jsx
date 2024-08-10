@@ -19,11 +19,10 @@ const CodeEditor = () => {
     setLanguage(language);
     setValue(CODE_SNIPPETS[language]);
   };
-
   return (
     <Box>
-      <HStack spacing={4}>
-        <Box w="50%">
+      <HStack spacing={4} style={{display:"flex",flexWrap:"row"}}>
+        <Box w="50%" style={{minWidth:"200px"}}>
           <LanguageSelector language={language} onSelect={onSelect} />
           <Editor
             options={{
@@ -40,7 +39,7 @@ const CodeEditor = () => {
             onChange={(value) => setValue(value)}
           />
         </Box>
-        <Output editorRef={editorRef} language={language} />
+        <Output editorRef={editorRef} language={language}/>
       </HStack>
     </Box>
   );
