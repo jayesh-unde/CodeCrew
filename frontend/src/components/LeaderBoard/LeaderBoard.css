@@ -1,0 +1,54 @@
+/* src/Leaderboard.css */
+
+body {
+    background-color: #121212;
+    color: #e0e0e0;
+    font-family: Arial, sans-serif;
+}
+
+.leaderboard {
+    padding: 20px;
+    margin: 0 auto;
+    max-width: 800px;
+    text-align: center;
+    background-color: #1e1e1e;
+    border-radius: 8px;
+}
+
+.leaderboard-title {
+    font-size: 24px;
+    margin-bottom: 20px;
+}
+
+.leaderboard-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+}
+
+.leaderboard-table th,
+.leaderboard-table td {
+    padding: 10px;
+    text-align: left;
+}
+
+.leaderboard-table th {
+    background-color: #333333;
+    color: #ffffff;
+}
+
+.leaderboard-table tr {
+    background-color: #252525;
+}
+
+.leaderboard-table tr:nth-child(even) {
+    background-color: #2e2e2e;
+}
+
+.leaderboard-table tr:hover {
+    background-color: #3a3a3a;
+}
+
+.leaderboard-table td {
+    border-bottom: 1px solid #444444;
+}

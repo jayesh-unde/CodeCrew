@@ -1,0 +1,109 @@
+
+.contestPage {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+    min-height: 100vh; /* Ensure it takes up full viewport height */
+    
+    color: #ddd;
+}
+
+.tabs {
+    display: flex;
+    justify-content: center;
+    margin: 20px 0;
+    width: 100%;
+    color: #ddd;
+}
+
+.tab {
+    margin: 0 15px;
+    padding: 10px 20px;
+    cursor: pointer;
+    border-bottom: 2px solid transparent;
+    transition: border-bottom 0.3s;
+    color: #ddd;
+}
+
+.tab.active {
+    border-bottom: 2px solid #ddd;
+    font-weight: bold;
+}
+
+.contestTable {
+    width: 100%;
+    max-width: 1000px;
+    border-collapse: collapse;
+    margin: 20px 0;
+}
+
+.contestTableHeader {
+    display: grid;
+    grid-template-columns: 1fr 3fr 2fr 1fr 1fr;
+    background-color: #333;
+    color: #ddd;
+    padding: 10px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+}
+
+.contestTableBody {
+    width: 100%;
+}
+
+.contestRow {
+    display: grid;
+    grid-template-columns: 1fr 3fr 2fr 1fr 1fr;
+    padding: 10px;
+    border-bottom: 1px solid #444;
+    transition: background-color 0.3s;
+}
+
+.contestRow:hover {
+    background-color: #222;
+}
+
+.headerItem, .rowItem {
+    padding: 10px 15px;
+}
+
+.rowItem {
+    color: #ddd;
+    font-size: 14px;
+}
+.leaderboardButton {
+    padding: 8px 16px;
+    background-color: #2D3748; /* Dark gray/blue background */
+    color: #E2E8F0; /* Light gray text color */
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.875rem;
+    font-weight: bold;
+    transition: background-color 0.3s ease;
+
+    display: block; /* To take full width of the container */
+    width: 100%;
+    text-align: center;
+}
+
+.leaderboardButton:hover {
+    background-color: #4A5568; /* Slightly lighter gray/blue on hover */
+}
+.createContestButton {
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.createContestButton:hover {
+    background-color: #0056b3;
+}
