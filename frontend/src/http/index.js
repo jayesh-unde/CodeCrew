@@ -15,5 +15,6 @@ const api = axios.create(
 
 export const executeCode = (language, sourceCode, inputValue) => api.post('/api/run', { language, code: sourceCode, inputValue });
 export const submitQuestion = (questionData) => api.post('/api/submit-question', questionData);
-
+export const createContest = (contestData) => api.post('/api/create-contest', contestData);
+export const getQuestion = () => api.get('/api/get-question');
 export default api;

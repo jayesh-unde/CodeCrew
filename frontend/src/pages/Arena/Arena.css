@@ -1,0 +1,46 @@
+.filters {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px;
+    background-color: #444; /* Slightly lighter than the container for contrast */
+    border-radius: 8px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 4px rgba(255, 255, 255, 0.1); /* Adjusted shadow color */
+    color: #ddd; /* Light text color for readability */
+}
+
+.filters label {
+    color: #ccc; /* Lighter color for label text */
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    gap: 10px; /* Space between label text and input/select */
+}
+
+.filters select, 
+.filters input {
+    padding: 10px;
+    border-radius: 4px;
+    border: 1px solid #555; /* Subtle border color for dark themes */
+    background-color: #222; /* Dark background for form elements */
+    color: #ddd; /* Light text color */
+    font-size: 16px;
+}
+
+.filters select:hover,
+.filters input:hover {
+    border-color: #008bff; /* Hover effect to indicate interactive elements */
+}
+
+.filters select:focus, 
+.filters input:focus {
+    border-color: #007bff; /* Bright focus color for visibility */
+    outline: none;
+    box-shadow: 0 0 3px rgba(0, 123, 255, 0.5); /* Bright and noticeable focus shadow */
+}
+.problem-set-container {
+    margin-left: 20px;
+    margin-right: 20px; /* Center the container */
+     /* More pronounced shadow for dark theme */
+}

@@ -49,6 +49,30 @@ class QuestionController {
             });
         }
     }
+
+    async getQuestion(req, res) {
+        try {
+            const questions = await Question.find({}); // Fetch all documents from the 'questions' collection
+            if (!questions.length) {
+                return res.status(404).json({
+                    success: false,
+                    message: 'No questions found'
+                });
+            }
+            res.status(200).json({
+                success: true,
+                data: questions
+            });
+        } catch (error) {
+            console.error('Error retrieving questions:', error);
+            res.status(500).json({
+                success: false,
+                message: 'Internal server error',
+                error: error.message
+            });
+        }
+    }
+
 }
 
 module.exports = new QuestionController();
