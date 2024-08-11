@@ -1,4 +1,4 @@
-import { useRef, useState, useEffect } from "react";
+import { useRef, useState,useEffect } from "react";
 import { Box, HStack } from "@chakra-ui/react";
 import { Editor } from "@monaco-editor/react";
 import LanguageSelector from "./LanguageSelector";
@@ -28,8 +28,7 @@ const CodeEditor = () => {
   }, []);
   useEffect(() => {
     localStorage.setItem('codeEditorContent', value);
-  }, [value]);
-
+}, [value]);
   return (
     <Box>
       <HStack spacing={4} style={{display:"flex",flexWrap:"row"}}>

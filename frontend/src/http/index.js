@@ -14,7 +14,7 @@ const api = axios.create(
 //list of all endpoints
 
 export const executeCode = (language, sourceCode, inputValue) => api.post('/api/run', { language, code: sourceCode, inputValue });
-export const judge = (language, code, testcases) => api.post('api/judge',{language, code, testcases});
-export const judgeCustomTest = (language, code, correctCode, cases) => api.post('api/judgeCustomTest',{language, code, correctCode, testcases:cases})
-export const getQuestion = (qid)=> api.post('/api/getQuestion',{qid});
+export const submitQuestion = (questionData) => api.post('/api/submit-question', questionData);
+export const createContest = (contestData) => api.post('/api/create-contest', contestData);
+export const getQuestion = () => api.get('/api/get-question');
 export default api;

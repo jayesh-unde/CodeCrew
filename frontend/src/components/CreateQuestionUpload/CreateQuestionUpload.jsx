@@ -1,8 +1,8 @@
+// CreateQuestionUpload.js
 import React, { useState } from "react";
 import { Editor } from "@tinymce/tinymce-react";
 import { useToast } from "@chakra-ui/react";
-import './QuestionUpload.css'; // Assuming the CSS file is named 'styles.css'
-import { submitQuestion } from "../../http";
+import './CreateQuestionUpload.css'; // Assuming the CSS file is named 'styles.css'
 
 const topicsList = [
   "Stack",
@@ -13,12 +13,14 @@ const topicsList = [
   "LinkedList",
 ];
 
-const QuestionUpload = () => {
+const CreateQuestionUpload = ({ onSave }) => {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [difficulty, setDifficulty] = useState("easy");
   const [topics, setTopics] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
+  const [points, setPoints] = useState();
+
   const [solution, setSolution] = useState({
     language: "cpp",
     file: null,
@@ -57,20 +59,15 @@ const QuestionUpload = () => {
     const file = e.target.files[0];
   
     if (!file) return;
-    console.log("Selected file:", file.name, file.type);
   
     const fileReader = new FileReader();
   
-    // Define what happens on successful data read
     fileReader.onload = (event) => {
-      // Here, event.target.result contains the text of the file
       const fileContent = event.target.result;
-      console.log("File content:", fileContent); // Log file content for debugging
   
-      // Update the solution state with the file content
       setSolution(prev => ({
         ...prev,
-        code: fileContent, // Optional: Keep the file object if needed elsewhere in your app
+        code: fileContent,
       }));
   
       toast({
@@ -82,7 +79,6 @@ const QuestionUpload = () => {
       });
     };
   
-    // Define what happens in case of error
     fileReader.onerror = (error) => {
       toast({
         title: "Error reading file",
@@ -93,8 +89,7 @@ const QuestionUpload = () => {
       });
     };
   
-    // Validate file extension if necessary
-    const validExtensions = { cpp: "cpp", python: "py" }; // Example: Add more if needed
+    const validExtensions = { cpp: "cpp", python: "py" };
     const fileExtension = file.name.split('.').pop();
     
     if (fileExtension !== validExtensions[solution.language]) {
@@ -106,58 +101,15 @@ const QuestionUpload = () => {
         isClosable: true,
       });
     } else {
-      fileReader.readAsText(file); // Read the file as text
+      fileReader.readAsText(file);
     }
   };
 
-  const handleSubmit = async(e) => {
-    e.preventDefault();
-
-    // Validation for empty fields
-    if (!title) {
+  const handleSave = () => {
+    if (!title || !topics.length || !description || !points || (!solution.language || (!solution.file && !solution.code)) || !testCases.length || testCases.some(tc => !tc.input || !tc.output)) {
       toast({
-        title: "Missing Field",
-        description: "Please enter a title.",
-        status: "error",
-        duration: 5000,
-        isClosable: true,
-      });
-      return;
-    }
-    if (!topics.length) {
-      toast({
-        title: "Missing Field",
-        description: "Please add at least one topic.",
-        status: "error",
-        duration: 5000,
-        isClosable: true,
-      });
-      return;
-    }
-    if (!description) {
-      toast({
-        title: "Missing Field",
-        description: "Please enter a description.",
-        status: "error",
-        duration: 5000,
-        isClosable: true,
-      });
-      return;
-    }
-    if (!solution.language || (!solution.file && !solution.code)) {
-      toast({
-        title: "Missing Field",
-        description: "Please upload a code file or write your solution.",
-        status: "error",
-        duration: 5000,
-        isClosable: true,
-      });
-      return;
-    }
-    if (!testCases.length || testCases.some(tc => !tc.input || !tc.output)) {
-      toast({
-        title: "Missing Field",
-        description: "Please add and complete all test cases.",
+        title: "Validation Error",
+        description: "Please fill all required fields properly.",
         status: "error",
         duration: 5000,
         isClosable: true,
@@ -165,56 +117,31 @@ const QuestionUpload = () => {
       return;
     }
 
-    // Handle form submission if validation passes
-    if (!title || !topics.length || !description || (!solution.language || (!solution.file && !solution.code)) || !testCases.length || testCases.some(tc => !tc.input || !tc.output)) {
-      toast({
-          title: "Validation Error",
-          description: "Please fill all required fields properly.",
-          status: "error",
-          duration: 5000,
-          isClosable: true,
-      });
-      return;
-  }
+    const questionData = {
+      title,
+      topics,
+      difficulty,
+      description,
+      points,
+      solution,
+      testCases: testCases.reduce((map, obj, index) => ({
+        ...map, [`TestCase${index + 1}`]: { Input: obj.input, Output: obj.output }
+      }), {}),
+    };
 
-  try {
-      const formData = {
-          title,
-          topics,
-          difficulty,
-          description,
-          solution,
-          testCases: testCases.reduce((map, obj, index) => ({
-              ...map, [`TestCase${index + 1}`]: { Input: obj.input, Output: obj.output }
-          }), {}),
-      };
-
-      const response = await submitQuestion(formData); // Call to your submitQuestion function
-      if (response.data.success) {
-          toast({
-              title: "Question Submitted",
-              description: "Your question has been uploaded successfully.",
-              status: "success",
-              duration: 5000,
-              isClosable: true,
-          });
-      } else {
-          throw new Error(response.data.error || 'Failed to submit question');
-      }
-  } catch (error) {
-      toast({
-          title: "Submission Failed",
-          description: error.message,
-          status: "error",
-          duration: 5000,
-          isClosable: true,
-      });
-  }
+    onSave(questionData); // Pass the data back to the parent component
+    toast({
+      title: "Question Saved",
+      description: "Your question has been saved successfully.",
+      status: "success",
+      duration: 5000,
+      isClosable: true,
+    });
   };
 
   return (
     <div className="form-container">
-      <form className="form" onSubmit={handleSubmit}>
+      <form className="form">
         <div className="grid">
           <div className="flex-col">
             <label className="label">Topic</label>
@@ -282,6 +209,16 @@ const QuestionUpload = () => {
             onChange={(e) => setTitle(e.target.value)}
           />
         </div>
+        <div className="flex-col">
+  <label className="label">Points</label>
+  <input
+    type="number"
+    className="input"
+    value={points}
+    onChange={(e) => setPoints(parseInt(e.target.value) || 0)}
+    placeholder="Enter points"
+  />
+</div>
 
         <div className="flex-col">
           <label className="label">Description</label>
@@ -371,12 +308,12 @@ const QuestionUpload = () => {
           </button>
         </div>
 
-        <button type="submit" className="submit-button">
-          Submit
+        <button type="button" className="submit-button" onClick={handleSave}>
+          Save Question
         </button>
       </form>
     </div>
   );
 };
 
-export default QuestionUpload;
+export default CreateQuestionUpload;
