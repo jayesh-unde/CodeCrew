@@ -11,7 +11,8 @@ function App() {
       <Routes>
         <Route path="/" element={<Home/>} />
         <Route path="/playground" element={<PlayGround/>} />
-        <Route path="/question" element={<QuestionPage/>} />
+        {/* <Route path="/question" element={<QuestionPage/>} /> */}
+        <Route path='/question/:_id' element={<QuestionPage/>} />
       </Routes>
     </BrowserRouter>
   );

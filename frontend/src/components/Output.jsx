@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Box, Button, Text, useToast } from "@chakra-ui/react";
 import { executeCode } from "../http";
 
@@ -9,6 +9,9 @@ const Output = ({ editorRef, language }) => {
   const [isError, setIsError] = useState(false);
   const [consoleError,setConsoleError] = useState('');
   const [inputValue, setInputValue] = useState('');
+  const [executionTime, setExecutionTime] = useState (Infinity);
+  const [response, setResponse] = useState (null);
+  const [memoryUsed, setMemoryUsed] = useState (0);
 
   const runCode = async () => {
     const sourceCode = editorRef.current.getValue();
@@ -16,7 +19,8 @@ const Output = ({ editorRef, language }) => {
     try {
       setIsLoading(true);
       const result = await executeCode(language, sourceCode, inputValue); // Use the executeCode function from http module
-      console.log(result);
+      console.log(result.data);
+      setResponse (result.data);
       setOutput(result.data.output.split("\n"));
       // setOutput(result);
       setConsoleError(undefined);
@@ -43,6 +47,13 @@ const Output = ({ editorRef, language }) => {
       setIsLoading(false);
     }
   };
+
+  useEffect (() => {
+      if (response !== null) {
+        setExecutionTime (response.time_taken);
+        setMemoryUsed (response.memory_used);
+      }
+  }, [response]);
 
   return (
     <Box w="50%">
@@ -99,7 +110,13 @@ const Output = ({ editorRef, language }) => {
             </>
           : 'Click "Run Code" to see the output here'
           }
+          {response ? 
+            <Box margin="20px">
+            <div>Time Taken: {(executionTime/1000).toFixed (3)} Sec</div>
+            <div>Memory Used: {memoryUsed} KB</div>
+          </Box> : <div></div>}
       </Box>
+      
     </Box>
   );
 };
