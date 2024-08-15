@@ -11,6 +11,8 @@ import "./index.css";
 // In your main component or App.js
 import "react-datepicker/dist/react-datepicker.css";
 import ContestPage from "./pages/ContestPage/ContestPage";
+import ContestRules from "./pages/ContestRules/ContestRules";
+import ContestQuestion from "./pages/ContestQuestion/ContestQuestion";
 
 function App() {
   return (
@@ -18,13 +20,14 @@ function App() {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/playground" element={<PlayGround />} />
-        <Route path="/question/:_id" element={<QuestionPage />} />
+        <Route path="/questions/:_id" element={<QuestionPage/>} />
         <Route path="/questionupload" element={<QuestionUpload />} />
         <Route path="/createcontest" element={<CreateContest />} />
         <Route path="/arena" element={<Arena />} />
         <Route path="/battleground" element={<ContestPage />} />
-        <Route path="/leaderboard" element={<Leaderboard />} />
-
+        <Route path="/contest/:contestId/leaderboard" element={<Leaderboard />} />
+        <Route path="/contestrules/:_id" element={<ContestRules />} />
+        <Route path="/contest/:contestId/question/:questionIndex" element={<ContestQuestion />} />
       </Routes>
     </BrowserRouter>
   );

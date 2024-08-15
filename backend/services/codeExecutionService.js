@@ -49,6 +49,7 @@ const executeCpp = async (codePath, inputs) => {
   return new Promise((resolve, reject) => {
     const jobId = uuid();
     const exePath = path.join(dirCodes, `${jobId}.exe`);
+    const TIME_LIMIT = 5000; // Set the time limit in milliseconds (e.g., 5000ms = 5 seconds)
 
     // Compile the C++ code
     const compileProcess = spawn('g++', [codePath, '-o', exePath]);
@@ -65,8 +66,7 @@ const executeCpp = async (codePath, inputs) => {
       // Execute the compiled binary
       const runProcess = spawn(exePath);
 
-
-       if (Array.isArray(inputs)) {
+      if (Array.isArray(inputs)) {
         inputs = inputs.join('\n');
       } else if (typeof inputs === 'object') {
         inputs = JSON.stringify(inputs);
@@ -84,6 +84,11 @@ const executeCpp = async (codePath, inputs) => {
       const startTime = performance.now();
       const memoryBefore = process.memoryUsage();
 
+      const timeoutId = setTimeout(() => {
+        runProcess.kill(); // Terminate the process if it exceeds the time limit
+        reject({ code: 1, error: 'Time Limit Exceeded' });
+      }, TIME_LIMIT);
+
       runProcess.stdout.on('data', (data) => {
         output += data.toString();
       });
@@ -93,6 +98,8 @@ const executeCpp = async (codePath, inputs) => {
       });
 
       runProcess.on('close', (code) => {
+        clearTimeout(timeoutId); // Clear the timeout if the process completes in time
+
         // End timing and memory usage tracking
         const endTime = performance.now();
         const executionTime = (endTime - startTime);
@@ -109,17 +116,20 @@ const executeCpp = async (codePath, inputs) => {
       });
 
       runProcess.on('error', (err) => {
+        clearTimeout(timeoutId);
         reject({ code: 1, error: err.message });
       });
     });
   });
 };
 
+
 // Execute Python code
 const executePy = (filepath, inputs) => {
-  const filename = path.basename(filepath);
-
   return new Promise((resolve, reject) => {
+    const filename = path.basename(filepath);
+    const TIME_LIMIT = 5000; // Set the time limit in milliseconds (e.g., 5000ms = 5 seconds)
+
     const program = spawn('python', [filename], { cwd: dirCodes });
     let output = '';
     let error = '';
@@ -127,6 +137,11 @@ const executePy = (filepath, inputs) => {
     // Start timing and memory usage tracking
     const startTime = performance.now();
     const memoryBefore = process.memoryUsage();
+
+    const timeoutId = setTimeout(() => {
+      program.kill(); // Terminate the process if it exceeds the time limit
+      reject({ code: 1, error: 'Time Limit Exceeded' });
+    }, TIME_LIMIT);
 
     program.stdin.write(inputs);
     program.stdin.end();
@@ -140,11 +155,13 @@ const executePy = (filepath, inputs) => {
     });
 
     program.on('error', (err) => {
-      console.log(err);
+      clearTimeout(timeoutId);
       reject({ code: 1, error: err.message });
     });
 
     program.on('close', (code) => {
+      clearTimeout(timeoutId); // Clear the timeout if the process completes in time
+
       // End timing and memory usage tracking
       const endTime = performance.now();
       const executionTime = (endTime - startTime);
@@ -161,6 +178,7 @@ const executePy = (filepath, inputs) => {
     });
   });
 };
+
 
 
 const formatInput = (testcases)=>{

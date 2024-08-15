@@ -9,7 +9,7 @@ import QuestionComponent from '../../components/QuestionComponent';
 import TestCaseContainer from '../../components/TestCaseContainer';
 import Navbar from "../../components/Navbar";
 import { judge,judgeCustomTest,getQuestion } from "../../http";
-import ExecutionCard from '../../components/ExecutionCard';
+
 
 const questionData = {
   "Title": "Reverse Integer",
@@ -84,7 +84,7 @@ const QuestionPage = () => {
     const inputValue = cases;
     setIsLoading(true);
     try{
-      const response = await getQuestion(qid);
+      const response = await getQuestion(_id);
       console.log(response.data);
       setQuestion(response.data);
     }catch(err){
@@ -96,7 +96,7 @@ const QuestionPage = () => {
       const correctCode = question.Solution.code;
       try {
         const result = await judgeCustomTest(language, sourceCode, correctCode, inputValue); // Use the executeCode function from http module
-        console.log("find result",result.data);
+        console.log("find result");
         setRunOutput(result.data);
       } catch (error) {
         console.log();
@@ -131,7 +131,7 @@ const QuestionPage = () => {
     const code = value;
     setIsLoading(true);
     try{
-      const response = await getQuestion(qid);
+      const response = await getQuestion(_id);
       console.log(response.data);
       setQuestion(response.data);
     }catch(err){

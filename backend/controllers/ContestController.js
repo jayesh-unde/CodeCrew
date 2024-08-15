@@ -45,6 +45,34 @@ class ContestController {
             res.status(500).json({ message: "Failed to create contest", error: error.message });
         }
     }
+
+    // New function to get all contests
+    async getAllContest(req, res) {
+        try {
+            const contests = await Contest.find({});
+            res.status(200).json({ contests });
+        } catch (error) {
+            res.status(500).json({ message: "Failed to retrieve contests", error: error.message });
+        }
+    }
+    async getContest(req, res) {
+        try {
+            const { _id } = req.body; // req.body should contain the JSON data
+            console.log(_id); // Ensure the ID is logged correctly
+            
+            const contest = await Contest.findById(_id); // No need for braces around _id here
+    
+            if (!contest) {
+                return res.status(404).json({ message: "Contest not found" });
+            }
+    
+            res.status(200).json(contest );
+        } catch (error) {
+            res.status(500).json({ message: "Failed to retrieve contest", error: error.message });
+        }
+    }
+    
+    
 }
 
 module.exports = new ContestController();

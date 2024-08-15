@@ -1,26 +1,51 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { formatDistanceToNow, parseISO } from 'date-fns';
 import { useNavigate } from 'react-router-dom';
+import { getAllContest} from '../../http' // Ensure the path is correct for your project
 import './ContestPage.css';
 
 const ContestPage = () => {
     const [activeTab, setActiveTab] = useState('ongoing');
+    const [contests, setContests] = useState({ past: [], ongoing: [], upcoming: [] });
     const navigate = useNavigate();
+
+    useEffect(() => {
+        // Fetch contests when the component mounts
+        getAllContest()
+            .then(response => {
+                const allContests = response.data.contests;
+                const now = Date.now();
+
+                const past = allContests.filter(contest => new Date(contest.EndTime).getTime() < now);
+                const ongoing = allContests.filter(contest => 
+                    new Date(contest.StartTime).getTime() <= now && new Date(contest.EndTime).getTime() >= now
+                );
+                const upcoming = allContests.filter(contest => new Date(contest.StartTime).getTime() > now);
+
+                setContests({ past, ongoing, upcoming });
+            })
+            .catch(error => {
+                console.error("Failed to fetch contests", error);
+            });
+    }, []);
+
     const renderContests = () => {
         switch (activeTab) {
             case 'past':
-                return <PastContests />;
+                return <PastContests contests={contests.past} />;
             case 'ongoing':
-                return <OngoingContests />;
+                return <OngoingContests contests={contests.ongoing} />;
             case 'upcoming':
-                return <UpcomingContests />;
+                return <UpcomingContests contests={contests.upcoming} />;
             default:
                 return null;
         }
     };
+
     const handleCreateContestClick = () => {
         navigate('/createcontest'); // Navigate to the create contest page
     };
+
     return (
         <div className="contestPage">
             <div className="tabs">
@@ -46,28 +71,37 @@ const ContestPage = () => {
             <div className="contestContent">
                 {renderContests()}
             </div>
-            <button  onClick={handleCreateContestClick} className="createContestButton">Create Contest</button>
+            <button onClick={handleCreateContestClick} className="createContestButton">Create Contest</button>
         </div>
     );
 };
 
-const ContestRow = ({ code, name, start, duration, status }) => (
-    <div className="contestRow">
-        <div className="rowItem">{code}</div>
-        <div className="rowItem">{name}</div>
-        <div className="rowItem">{start}</div>
-        <div className="rowItem">{duration}</div>
-        <div className="rowItem">
-            {status === 'past' ? (
-                <button className="leaderboardButton" onClick={()=>navigate('/leaderboard')}>Leaderboard</button>
-            ) : (
-                formatDistanceToNow(parseISO(start), { addSuffix: true })
-            )}
-        </div>
-    </div>
-);
+const ContestRow = ({ code, name, start, duration, status }) => {
+    const navigate = useNavigate();
 
-const PastContests = () => (
+    const handleContestClick = () => {
+        navigate(`/contestrules/${code}`);
+    };
+
+    return (
+        <div className="contestRow" onClick={handleContestClick} style={{ cursor: 'pointer' }}>
+            <div className="rowItem">{code}</div>
+            <div className="rowItem">{name}</div>
+            <div className="rowItem">{start}</div>
+            <div className="rowItem">{duration}</div>
+            <div className="rowItem">
+                {status === 'past' ? (
+                    <button className="leaderboardButton" onClick={()=>navigate(`/leaderboard/${code}`)}>Leaderboard</button>
+                ) : (
+                    formatDistanceToNow(parseISO(start), { addSuffix: true })
+                )}
+            </div>
+        </div>
+    );
+};
+
+
+const PastContests = ({ contests }) => (
     <div className="contestTable">
         <div className="contestTableHeader">
             <div className="headerItem">Code</div>
@@ -79,19 +113,21 @@ const PastContests = () => (
             </div>
         </div>
         <div className="contestTableBody">
-            {/* Example past contest */}
-            <ContestRow
-                code="START146"
-                name="Starters 146 (Rated till 5 stars)"
-                start="07 Aug 2024 Wed 20:00"
-                duration="2 Hrs"
-                status="past"
-            />
+            {contests.map((contest) => (
+                <ContestRow
+                    key={contest._id}
+                    code={contest._id} // Assuming _id as the unique code
+                    name={contest.Title}
+                    start={new Date(contest.StartTime).toLocaleString()}
+                    duration={`${Math.ceil((new Date(contest.EndTime) - new Date(contest.StartTime)) / (1000 * 60 * 60))} Hrs`}
+                    status="past"
+                />
+            ))}
         </div>
     </div>
 );
 
-const OngoingContests = () => (
+const OngoingContests = ({ contests }) => (
     <div className="contestTable">
         <div className="contestTableHeader">
             <div className="headerItem">Code</div>
@@ -101,19 +137,21 @@ const OngoingContests = () => (
             <div className="headerItem">Starts In</div>
         </div>
         <div className="contestTableBody">
-            {/* Example ongoing contest */}
-            <ContestRow
-                code="START410"
-                name="Weekly Contest 410"
-                start={new Date(Date.now() + 5000).toISOString()}
-                duration="2 Hrs"
-                status="ongoing"
-            />
+            {contests.map((contest) => (
+                <ContestRow
+                    key={contest._id}
+                    code={contest._id} // Assuming _id as the unique code
+                    name={contest.Title}
+                    start={new Date(contest.StartTime).toISOString()}
+                    duration={`${Math.ceil((new Date(contest.EndTime) - new Date(contest.StartTime)) / (1000 * 60 * 60))} Hrs`}
+                    status="ongoing"
+                />
+            ))}
         </div>
     </div>
 );
 
-const UpcomingContests = () => (
+const UpcomingContests = ({ contests }) => (
     <div className="contestTable">
         <div className="contestTableHeader">
             <div className="headerItem">Code</div>
@@ -123,14 +161,16 @@ const UpcomingContests = () => (
             <div className="headerItem">Starts In</div>
         </div>
         <div className="contestTableBody">
-            {/* Example upcoming contest */}
-            <ContestRow
-                code="START137"
-                name="Biweekly Contest 137"
-                start={new Date(Date.now() + 3600000).toISOString()}
-                duration="2 Hrs"
-                status="upcoming"
-            />
+            {contests.map((contest) => (
+                <ContestRow
+                    key={contest._id}
+                    code={contest._id} // Assuming _id as the unique code
+                    name={contest.Title}
+                    start={new Date(contest.StartTime).toISOString()}
+                    duration={`${Math.ceil((new Date(contest.EndTime) - new Date(contest.StartTime)) / (1000 * 60 * 60))} Hrs`}
+                    status="upcoming"
+                />
+            ))}
         </div>
     </div>
 );

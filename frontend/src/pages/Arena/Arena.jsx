@@ -45,9 +45,9 @@ const Arena = () => {
                     Filter by Difficulty:
                     <select value={filterDifficulty} onChange={(e) => setFilterDifficulty(e.target.value)}>
                         <option value="">All</option>
-                        <option value="Easy">Easy</option>
-                        <option value="Medium">Medium</option>
-                        <option value="Hard">Hard</option>
+                        <option value="easy">Easy</option>
+                        <option value="medium">Medium</option>
+                        <option value="hard">Hard</option>
                     </select>
                 </label>
                 <label>

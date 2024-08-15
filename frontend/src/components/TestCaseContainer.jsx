@@ -47,7 +47,7 @@ function TestCaseContainer({ question,getTestCases,index, setIndex, submitOutput
               />
             </VStack>
           </TabPanel>
-          <TabPanel >
+          <TabPanel>
             <VStack p={4} spacing={4}>
               {consoleError? <div>
                 <div><Text fontSize="sm" color="red.500" >Error: </Text> </div>
