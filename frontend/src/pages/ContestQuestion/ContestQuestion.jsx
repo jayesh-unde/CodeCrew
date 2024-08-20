@@ -31,7 +31,7 @@ const getPersistentId = () => {
 // Initialize the socket connection outside of the component lifecycle
 const persistentId = getPersistentId();
 console.log('persistentId before socket initialization:', persistentId); 
-const socket = io('http://localhost:5500', {
+const socket = io(import.meta.env.VITE_BACKEND_URL, {
   query: { persistentId: persistentId }
 });
 
