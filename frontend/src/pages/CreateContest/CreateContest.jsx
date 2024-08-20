@@ -4,7 +4,7 @@ import {
 } from '@chakra-ui/react';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
-import CreateQuestionUpload from '../../components/createquestionupload/CreateQuestionUpload';
+import CreateQuestionUpload from '../../components/CreateQuestionUpload/CreateQuestionUpload';
 import { createContest } from '../../http'; // Make sure this import path is correct
 import { useNavigate } from 'react-router-dom';
 
