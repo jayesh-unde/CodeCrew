@@ -6,7 +6,8 @@ import './ContestRules.css';
 const ContestRules = () => {
   const { _id } = useParams(); // Get the contest ID from the URL params
   const [contest, setContest] = useState(null);
-  const [contestQuestions, setContestQuestions] = useState(null); // State to store contest details
+  const [contestQuestions, setContestQuestions] = useState(null);
+  const [endTime,setEndTime] = useState(null); // State to store contest details
   const [loading, setLoading] = useState(true); // State for loading status
   const [error, setError] = useState(null); // State to handle errors
   const navigate = useNavigate();
@@ -21,6 +22,7 @@ const ContestRules = () => {
          // Call getContest with the contest ID
         setContest(data.data);
         setContestQuestions(data.data.Questions);
+        setEndTime(data.data.EndTime);
       } catch (err) {
         setError('Failed to load contest details');
       } finally {
@@ -43,7 +45,7 @@ const ContestRules = () => {
     return <div>Contest not found</div>;
   }
   const handleQuestionClick = (index) => {
-    navigate(`/contest/${_id}/question/${index}`, { state: { contestQuestions } });
+    navigate(`/contest/${_id}/question/${index}`, { state: { contestQuestions,endTime } });
   };
   return (
     <div className="container">

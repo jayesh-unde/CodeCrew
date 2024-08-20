@@ -71,6 +71,28 @@ class ContestController {
             res.status(500).json({ message: "Failed to retrieve contest", error: error.message });
         }
     }
+    async saveLeaderboard(req, res) {
+        const { contestId, leaderboard } = req.body;
+
+        try {
+            // Find the contest by ID
+            const contest = await Contest.findById(contestId);
+
+            if (!contest) {
+                return res.status(404).json({ message: "Contest not found" });
+            }
+
+            // Update the contest's leaderboard
+            contest.Leaderboard = leaderboard;
+
+            // Save the updated contest
+            await contest.save();
+
+            res.status(200).json({ message: "Leaderboard saved successfully!" });
+        } catch (error) {
+            res.status(500).json({ message: "Failed to save leaderboard", error: error.message });
+        }
+    }
     
     
 }

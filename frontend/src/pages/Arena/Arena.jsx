@@ -4,6 +4,7 @@ import "./Arena.css";
 import ProblemSetCard from '../../components/ProblemSetCard/ProblemSetCard';
 import { getAllQuestion } from '../../http';
 import { Button } from '@chakra-ui/react';
+import Navbar from '../../components/Navbar';
 
 const Arena = () => {
     const [problems, setProblems] = useState([]);
@@ -40,6 +41,7 @@ const Arena = () => {
 
     return (
         <div>
+            <Navbar/>
             <div className="filters">
                 <label>
                     Filter by Difficulty:

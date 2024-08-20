@@ -1,44 +1,71 @@
-// src/Leaderboard.js
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import './LeaderBoard.css';
+import { useLocation } from 'react-router-dom';
+import io from 'socket.io-client';
 
 const Leaderboard = () => {
-    const data = [
-        { rank: 1, username: 'fjzzq2002', score: 22, finishTime: '0:33:13' },
-        { rank: 2, username: 'iixre', score: 22, finishTime: '0:38:56' },
-        { rank: 3, username: 'tsreaper', score: 22, finishTime: '0:39:01' },
-        { rank: 4, username: 'tiger2005', score: 22, finishTime: '0:42:20' },
-        { rank: 5, username: 'dong_liu', score: 22, finishTime: '0:48:08' },
-        { rank: 6, username: 'py-is-best-lang', score: 22, finishTime: '0:53:27' },
-        { rank: 7, username: 'PurpleCrayon', score: 22, finishTime: '0:57:37' },
-        // Add more data as needed
-    ];
+  const location = useLocation();
+  const [leaderboard, setLeaderboard] = useState(location.state?.leaderboard || []);
+  const persistentId = location.state?.persistentId; // Retrieve the persistentId from state
 
-    return (
-        <div className="leaderboard">
-            <h1 className="leaderboard-title">Ranking of Weekly Contest 409</h1>
-            <table className="leaderboard-table">
-                <thead>
-                    <tr>
-                        <th>Rank</th>
-                        <th>Username</th>
-                        <th>Score</th>
-                        <th>Finish Time</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {data.map((item, index) => (
-                        <tr key={index}>
-                            <td>{item.rank}</td>
-                            <td>{item.username}</td>
-                            <td>{item.score}</td>
-                            <td>{item.finishTime}</td>
-                        </tr>
-                    ))}
-                </tbody>
-            </table>
-        </div>
-    );
+  useEffect(() => {
+    const socket = io('http://localhost:5500'); // Ensure the port matches your backend server
+
+    // Request current leaderboard data on component mount
+    socket.emit('request_leaderboard');
+    
+    // Listen for the updated leaderboard
+    socket.on('update_leaderboard', (data) => {
+      setLeaderboard(data.users);
+    });
+
+    return () => {
+      socket.disconnect();
+    };
+  }, []);
+
+  // Ensure leaderboard data is always available and sorted
+  const sortedData = leaderboard.sort((a, b) => {
+    if (b.score === a.score) {
+      return new Date(a.lastSubmit) - new Date(b.lastSubmit); // Earlier submission wins in case of a tie
+    }
+    return b.score - a.score;
+  });
+
+  return (
+    <div className="leaderboard">
+      <h1 className="leaderboard-title">Ranking of Weekly Contest 409</h1>
+      <table className="leaderboard-table">
+        <thead>
+          <tr>
+            <th>Rank</th>
+            <th>Username</th>
+            <th>Score</th>
+            <th>Finish Time</th>
+          </tr>
+        </thead>
+        <tbody>
+          {sortedData.length > 0 ? (
+            sortedData.map((user, index) => (
+              <tr 
+                key={user.userId || index} 
+                className={user.userId === persistentId ? 'highlight-row' : ''}
+              >
+                <td>{index + 1}</td>
+                <td>{user.userId}</td> {/* This should display the correct persistentId */}
+                <td>{user.score}</td>
+                <td>{user.lastSubmit ? new Date(user.lastSubmit).toLocaleTimeString() : 'N/A'}</td>
+              </tr>
+            ))
+          ) : (
+            <tr>
+              <td colSpan="4" style={{ textAlign: 'center' }}>No users to display</td>
+            </tr>
+          )}
+        </tbody>
+      </table>
+    </div>
+  );
 };
 
 export default Leaderboard;

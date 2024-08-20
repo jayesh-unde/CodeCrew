@@ -3,6 +3,7 @@ import { formatDistanceToNow, parseISO } from 'date-fns';
 import { useNavigate } from 'react-router-dom';
 import { getAllContest} from '../../http' // Ensure the path is correct for your project
 import './ContestPage.css';
+import Navbar from '../../components/Navbar';
 
 const ContestPage = () => {
     const [activeTab, setActiveTab] = useState('ongoing');
@@ -47,6 +48,7 @@ const ContestPage = () => {
     };
 
     return (
+        <><Navbar/>
         <div className="contestPage">
             <div className="tabs">
                 <div
@@ -73,6 +75,7 @@ const ContestPage = () => {
             </div>
             <button onClick={handleCreateContestClick} className="createContestButton">Create Contest</button>
         </div>
+        </>
     );
 };
 
@@ -80,18 +83,24 @@ const ContestRow = ({ code, name, start, duration, status }) => {
     const navigate = useNavigate();
 
     const handleContestClick = () => {
-        navigate(`/contestrules/${code}`);
+        if (status === 'ongoing') {
+            navigate(`/contestrules/${code}`);
+        }
     };
 
     return (
-        <div className="contestRow" onClick={handleContestClick} style={{ cursor: 'pointer' }}>
+        <div
+            className="contestRow"
+            onClick={handleContestClick}
+            style={{ cursor: status === 'ongoing' ? 'pointer' : 'default', opacity: status === 'ongoing' ? 1 : 0.6 }}
+        >
             <div className="rowItem">{code}</div>
             <div className="rowItem">{name}</div>
             <div className="rowItem">{start}</div>
             <div className="rowItem">{duration}</div>
             <div className="rowItem">
                 {status === 'past' ? (
-                    <button className="leaderboardButton" onClick={()=>navigate(`/leaderboard/${code}`)}>Leaderboard</button>
+                    <button className="leaderboardButton" onClick={() => navigate(`/leaderboard/${code}`)}>Leaderboard</button>
                 ) : (
                     formatDistanceToNow(parseISO(start), { addSuffix: true })
                 )}

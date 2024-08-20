@@ -35,6 +35,13 @@ const contestSchema = new Schema({
     Description: { type: String },
     StartTime: { type: Date, required: true },
     EndTime: { type: Date, required: true },
+    Leaderboard: [
+        {
+            userId: String,
+            score: Number,
+            lastSubmit: Date
+        }
+    ],
     Questions: [questionSchema] // Embedding the question schema directly into the contest schema
 }, {
     timestamps: true // Adds createdAt and updatedAt timestamps

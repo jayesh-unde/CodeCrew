@@ -23,4 +23,6 @@ export const createContest = (contestData) => api.post('/api/create-contest', co
 export const getAllQuestion = () => api.get('/api/get-all-question');
 export const getAllContest = ()=> api.get('/api/get-all-contest');
 export const getContest = (_id)=> api.post('/api/get-contest',{_id});
+export const saveLeaderboard = (data)=> api.post('/api/saveLeaderboard',data);
+
 export default api;

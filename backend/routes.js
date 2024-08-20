@@ -14,5 +14,6 @@ router.get('/api/get-all-question', QuestionController.getAllQuestion);
 router.post('/api/create-contest', ContestController.createContest);
 router.get('/api/get-all-contest', ContestController.getAllContest);
 router.post('/api/get-contest', ContestController.getContest);
+router.post('/api/saveLeaderboard', ContestController.saveLeaderboard);
 
 module.exports = router;

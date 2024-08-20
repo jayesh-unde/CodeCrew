@@ -52,3 +52,7 @@ body {
 .leaderboard-table td {
     border-bottom: 1px solid #444444;
 }
+.highlight-row {
+    background-color: #c1ccd6 !important; /* Light blue background, forcing with !important */
+  font-weight: bold; /* Bold font to make it stand out */
+  }
