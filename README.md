@@ -4,7 +4,7 @@ CodeCrew is an innovative online coding platform designed to empower developers 
 
 
 # Live Link
-https://https://codecrew.onrender.com
+https://codecrew.onrender.com
 
 **Key Features**
 Coding Playground: A real-time code editor with support for multiple programming languages, allowing users to write and execute code with custom inputs.
