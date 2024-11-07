@@ -30,6 +30,10 @@ const ExecutionCard = ({status,output}) => {
       
       <VStack align="stretch" spacing={2} style={{padding:"0px 20px"}}>
         <HStack justify="space-between">
+          <Text>Output:</Text>
+          <Text>{output.output}</Text>
+        </HStack>
+        <HStack justify="space-between">
           <Text>Time:</Text>
           <Text>{time_taken.toFixed(2)} mili secs</Text>
         </HStack>
