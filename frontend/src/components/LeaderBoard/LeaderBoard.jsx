@@ -9,7 +9,7 @@ const Leaderboard = () => {
   const persistentId = location.state?.persistentId; // Retrieve the persistentId from state
 
   useEffect(() => {
-    const socket = io('http://localhost:5500'); // Ensure the port matches your backend server
+    const socket = io('https://codecrew-backend.onrender.com'); // Ensure the port matches your backend server
 
     // Request current leaderboard data on component mount
     socket.emit('request_leaderboard');
