@@ -49,7 +49,7 @@ const executeCpp = async (codePath, inputs) => {
   return new Promise((resolve, reject) => {
     const jobId = uuid();
     const exePath = path.join(dirCodes, `${jobId}.exe`);
-    const TIME_LIMIT = 15000; // Set the time limit in milliseconds (e.g., 5000ms = 5 seconds)
+    const TIME_LIMIT = 35000; // Set the time limit in milliseconds (e.g., 5000ms = 5 seconds)
 
     // Compile the C++ code
     const compileProcess = spawn('g++', [codePath, '-o', exePath]);
