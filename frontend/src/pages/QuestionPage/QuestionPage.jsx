@@ -7,6 +7,7 @@ import { Editor } from "@monaco-editor/react";
 import { CODE_SNIPPETS } from "../../constants";
 import QuestionComponent from '../../components/QuestionComponent';
 import TestCaseContainer from '../../components/TestCaseContainer';
+import Loader from '../../components/Loader';
 import Navbar from "../../components/Navbar";
 import { judge,judgeCustomTest,getQuestion } from "../../http";
 
@@ -193,7 +194,7 @@ const QuestionPage = () => {
   console.log(consoleError);
   return (
     <>
-      {isLoading? <div>Loading</div>: <div>
+      {isLoading? <Loader />: <div>
       <Navbar />
       <ChakraProvider theme={theme}>
         <VStack spacing={4} m={2} h="calc(100vh - 4rem)" w="99%" overflowX="hidden">
